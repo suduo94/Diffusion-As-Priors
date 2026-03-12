@@ -85,10 +85,10 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://suduo94.github.io/Diffusion-As-Priors"
+                <a href="https://github.com/suduo94/Diffusion-As-Priors"
                    class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fas fa-globe"></i></span>
-                  <span>Project</span>
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
                 </a>
               </span>
               <span class="link-block">
@@ -111,16 +111,15 @@
       </div>
 
       <div class="columns is-centered">
-        <div class="column is-four-fifths">
+        <div class="column is-three-fifths-desktop is-four-fifths-tablet">
           <div class="figure-panel">
             <a href="./static/images/dap-overview.pdf" class="figure-link">
               <img src="./static/images/dap-overview.png" alt="Overview figure for DAP." class="paper-figure">
             </a>
           </div>
           <p class="figure-caption">
-            Overview of DAP. The method improves dataset distillation by explicitly injecting the overlooked
-            representativeness prior into diffusion sampling, while preserving the diversity and generalization
-            priors already encoded by pretrained diffusion models.
+            Figure 1 from the paper. DAP highlights how diffusion priors jointly improve diversity,
+            representativeness, and downstream performance for dataset distillation.
           </p>
         </div>
       </div>
@@ -155,6 +154,31 @@
 <section class="section" id="idea">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Key Idea</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="motivation-box">
+          <h3 class="title is-5">Motivation From Section 3.1</h3>
+          <p class="motivation-formula">
+            Distilled Dataset s.t. <span class="formula-diversity">Diversity</span> + <span class="formula-generalization">Generalization</span> + <span class="formula-representativeness">Representativeness</span>
+          </p>
+          <p>
+            The paper argues that an ideal distilled dataset should simultaneously preserve coverage of the original data manifold,
+            avoid overfitting to a single evaluation architecture, and retain the most critical information from the raw dataset.
+            DAP is designed around this trifecta rather than optimizing sample realism alone.
+          </p>
+          <p>
+            Formally, DAP starts from the original diffusion score and injects representativeness as an additional conditional term:
+          </p>
+          <p class="motivation-equation">
+            ∇<i>x</i> log <i>p</i>(<i>x</i>|<i>R</i>) = ∇<i>x</i> log <i>p</i>(<i>x</i>) + ∇<i>x</i> log <i>p</i>(<i>R</i>|<i>x</i>)
+          </p>
+          <p>
+            The first term contributes diversity and generalization, while the second term brings in representativeness guidance during sampling.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div class="columns is-multiline">
       <div class="column is-4">
         <div class="insight-card">
@@ -244,47 +268,55 @@
         </div>
       </div>
     </div>
+
+    <div class="columns is-centered top-space">
+      <div class="column is-full">
+        <h3 class="title is-4 has-text-centered">Table 3: Results on ImageNette and ImageWoof</h3>
+        <div class="figure-panel compact-panel">
+          <img src="./static/images/table3.png" alt="Table 3 from the paper showing results on ImageNette and ImageWoof." class="paper-figure">
+        </div>
+        <p class="figure-caption">
+          Table 3 from the paper. Results are evaluated with the hard-label protocol on ImageNette and ImageWoof.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="section" id="visuals">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Visual Evidence</h2>
-    <div class="columns is-vcentered">
-      <div class="column is-6">
-        <div class="figure-panel compact-panel">
-          <a href="./static/images/dap-representative-comparison.pdf" class="figure-link">
-            <img src="./static/images/dap-representative-comparison.png" alt="Representativeness comparison figure." class="paper-figure">
-          </a>
-        </div>
-      </div>
-      <div class="column is-6">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
         <div class="content has-text-justified">
           <p>
-            The paper shows that representativeness matters beyond raw realism. DAP improves alignment between synthetic and real data in feature space,
-            yielding samples that better preserve class semantics and the overall data manifold.
+            We only keep visualizations that appear in the final paper. The figure below corresponds to
+            Figure 5 in the paper and compares real versus synthetic feature distributions under IPC50.
           </p>
           <p>
-            Below is a lightweight qualitative gallery using examples from the submission assets. The DAP samples are visually more coherent than IGD on the same benchmark categories, matching the paper's quantitative gains.
+            The t-SNE plots show that DAP aligns synthetic samples with the training distribution while
+            maintaining generalization to test data, supporting the paper's claims about diversity and representativeness.
           </p>
         </div>
       </div>
     </div>
 
-    <div class="qualitative-grid">
-      <div class="qualitative-row">
-        <div class="qualitative-label">DAP</div>
-        <img src="./static/images/dap-sample-1.png" alt="DAP qualitative sample 1">
-        <img src="./static/images/dap-sample-2.png" alt="DAP qualitative sample 2">
-        <img src="./static/images/dap-sample-3.png" alt="DAP qualitative sample 3">
-        <img src="./static/images/dap-sample-4.png" alt="DAP qualitative sample 4">
+    <div class="paper-grid">
+      <div class="paper-grid-item">
+        <img src="./static/images/Fig5_tsne_nette_train_vs_gen_V3V.png" alt="Figure 5 ImageNette training t-SNE." class="paper-grid-image">
+        <p class="paper-grid-caption">ImageNette-Training</p>
       </div>
-      <div class="qualitative-row">
-        <div class="qualitative-label baseline-label">IGD</div>
-        <img src="./static/images/igd-sample-1.png" alt="IGD qualitative sample 1">
-        <img src="./static/images/igd-sample-2.png" alt="IGD qualitative sample 2">
-        <img src="./static/images/igd-sample-3.png" alt="IGD qualitative sample 3">
-        <img src="./static/images/igd-sample-4.png" alt="IGD qualitative sample 4">
+      <div class="paper-grid-item">
+        <img src="./static/images/Fig5_tsne_nette_test_vs_gen_V3V.png" alt="Figure 5 ImageNette test t-SNE." class="paper-grid-image">
+        <p class="paper-grid-caption">ImageNette-Test</p>
+      </div>
+      <div class="paper-grid-item">
+        <img src="./static/images/Fig5_tsne_woof_train_vs_gen_V3V.png" alt="Figure 5 ImageWoof training t-SNE." class="paper-grid-image">
+        <p class="paper-grid-caption">ImageWoof-Training</p>
+      </div>
+      <div class="paper-grid-item">
+        <img src="./static/images/Fig5_tsne_woof_test_vs_gen_V3V.png" alt="Figure 5 ImageWoof test t-SNE." class="paper-grid-image">
+        <p class="paper-grid-caption">ImageWoof-Test</p>
       </div>
     </div>
   </div>
